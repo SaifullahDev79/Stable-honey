@@ -20,6 +20,7 @@ contract HoneyMarketplace {
     address constant public USDC_ADDRESS = 0x0000000000000000000000000000000000000000;
     address constant public DAI_ADDRESS = 0x0000000000000000000000000000000000000000;
     address immutable public HONEYTOKEN_ADDRESS;
+    address immutable public TEST_DAI_ADDRESS;
 
     // TODO: Refactor this later
     modifier onlyBeekeeper {
@@ -27,8 +28,9 @@ contract HoneyMarketplace {
         _;
     } 
 
-    constructor(address honeytokenAddress) {
+    constructor(address honeytokenAddress, address testDAIAddress) {
         HONEYTOKEN_ADDRESS = honeytokenAddress;
+        TEST_DAI_ADDRESS = testDAIAddress;
     }   
 
     function offerHoney(uint256 amount) public onlyBeekeeper {
@@ -37,7 +39,8 @@ contract HoneyMarketplace {
     }
 
     function buyHoney(address stablecoin, address beekeeper, uint256 honeyAmount) public {
-        require(stablecoin == USDC_ADDRESS || stablecoin == DAI_ADDRESS);
+        require(stablecoin == USDC_ADDRESS || stablecoin == DAI_ADDRESS ||
+               stablecoin == TEST_DAI_ADDRESS);
         require(honeyAmount >= honeyMarketplace[beekeeper]);
         ERC20(stablecoin).transferFrom(msg.sender, beekeeper, honeyAmount * USD_HONEY_RATE);
         HoneyToken(HONEYTOKEN_ADDRESS).transfer(msg.sender, honeyAmount);
