@@ -41,8 +41,8 @@ contract HoneyMarketplace {
 
     function buyHoney(address stablecoin, address beekeeper, uint256 honeyAmount) public {
         require(stablecoin == USDC_ADDRESS || stablecoin == DAI_ADDRESS ||
-               stablecoin == TEST_DAI_ADDRESS);
-        require(honeyAmount >= honeyMarketplace[beekeeper]);
+               stablecoin == TEST_DAI_ADDRESS, 'invalid stablecoin address');
+        require(honeyAmount <= honeyMarketplace[beekeeper], 'not enough honey for sale');
         uint256 usdAmount = honeyAmount * USD_HONEY_RATE;
         ERC20(stablecoin).transferFrom(msg.sender, beekeeper, usdAmount);
         HoneyToken(HONEYTOKEN_ADDRESS).transfer(msg.sender, honeyAmount);
