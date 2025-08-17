@@ -14,6 +14,10 @@ Stable-honey/
 └── README.md
 ```
 
+## Flow Integration
+
+Deployed on Flow at https://evm.flowscan.io/tx/0xf2694ea70eeb79c761ad123869e741b828d96323f263acbdea56c811483db4c6!
+
 ## Pages Created
 
 ### 🏠 Landing Page (`/`)
