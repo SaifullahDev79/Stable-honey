@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import SolanaBuy from './SolanaBuy'; // 👈 add this
 
 const UserDashboard = ({ userAddress }) => {
   const [redemptionRequests, setRedemptionRequests] = useState([]);
@@ -10,6 +11,7 @@ const UserDashboard = ({ userAddress }) => {
     pickupDetails: ''
   });
 
+  // keep your current base; if you add a Vite proxy later, you can switch this to '/api'
   const API_BASE_URL = 'http://localhost:3001/api';
 
   useEffect(() => {
@@ -50,32 +52,21 @@ const UserDashboard = ({ userAddress }) => {
     }
   };
 
-  const handleBuyHoneyTokens = () => {
-    // This would integrate with PayPal USD in the future
-    alert('Buy Honey Tokens feature will be integrated with PayPal USD');
-  };
-
   return (
     <div className="dashboard">
       <h1 className="dashboard-title">User Dashboard</h1>
       
       <div className="dashboard-grid">
-        {/* Buy Honey Tokens Section */}
+        {/* Buy with Solana (devnet) */}
         <div className="dashboard-card">
-          <h2 className="card-title">Buy Honey Tokens</h2>
+          <h2 className="card-title">Buy HNY — Solana (devnet)</h2>
           <p style={{ marginBottom: '1rem', color: '#666' }}>
-            Purchase HNY tokens backed by real honey from local beekeepers.
+            Pay on Solana (devnet). After confirmation, HNY is minted to your connected EVM wallet.
           </p>
-          <button 
-            onClick={handleBuyHoneyTokens}
-            className="submit-btn"
-            style={{ marginBottom: '1rem' }}
-          >
-            Buy HNY Tokens
-          </button>
+          <SolanaBuy userAddress={userAddress} />
           <div className="info-box" style={{ marginTop: '1rem' }}>
-            <h3 className="info-box-title">Current Price</h3>
-            <p className="info-box-description">1 HNY = $1.00 USDC</p>
+            <h3 className="info-box-title">Current Rate</h3>
+            <p className="info-box-description">1 HNY = 1 USDC (devnet) <span style={{opacity:.7}}>(example)</span></p>
           </div>
         </div>
 
