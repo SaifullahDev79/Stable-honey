@@ -55,8 +55,9 @@ contract HoneyMarketplace {
     }
 
     function fulfillRedemption(uint256 consumerId, string calldata honeyId) public {
-        require(redemptionRequests[msg.sender].length != 0);
+        require(redemptionRequests[msg.sender].length != 0, 'notzero');
         HoneyToken(HONEYTOKEN_ADDRESS).burn(redemptionRequests[msg.sender][consumerId].amount, honeyId);
+        delete redemptionRequests[msg.sender][consumerId];
     }
 
 }

@@ -47,6 +47,7 @@ describe('HoneyMarketplace', async () => {
     await USDC.transfer(u2.address, 1000);
 
     const HoneyMarketplace = await ethers.deployContract('HoneyMarketplace', [await HoneyToken.getAddress(), await USDC.getAddress()]);
+    await HoneyToken.addBeekeeper(await HoneyMarketplace.getAddress()); /* This is a really important line to get this all to work for our implementation!!! */
 
     return { main, b1, b2, u1, u2, HoneyToken, USDC, HoneyMarketplace };
   };
@@ -69,6 +70,31 @@ describe('HoneyMarketplace', async () => {
     await HoneyMarketplace.connect(u2).buyHoney(await USDC.getAddress(), b2.address, 20);
     expect(await HoneyToken.balanceOf(u1.address)).to.equal(10);
     expect(await HoneyToken.balanceOf(u2.address)).to.equal(20);
+  });
+  it('submit and fulfill redemption', async () => {
+    const { main, b1, b2, u1, u2, HoneyToken, USDC, HoneyMarketplace } = await loadFixture(setupHoney);
+
+    await HoneyToken.connect(b1).approve(await HoneyMarketplace.getAddress(), 10);
+    await HoneyToken.connect(b2).approve(await HoneyMarketplace.getAddress(), 20);
+    await HoneyMarketplace.connect(b1).offerHoney(10);
+    await HoneyMarketplace.connect(b2).offerHoney(20);
+
+    await USDC.connect(u1).approve(await HoneyMarketplace.getAddress(), 10);
+    await USDC.connect(u2).approve(await HoneyMarketplace.getAddress(), 20);
+    await HoneyMarketplace.connect(u1).buyHoney(await USDC.getAddress(), b1.address, 10);
+    await HoneyMarketplace.connect(u2).buyHoney(await USDC.getAddress(), b2.address, 20);
+
+    await HoneyToken.connect(u1).approve(await HoneyMarketplace.getAddress(), 10);
+    await HoneyMarketplace.connect(u1).submitRedemption(b1.address, 10);
+    await HoneyToken.connect(u2).approve(await HoneyMarketplace.getAddress(), 20);
+    await HoneyMarketplace.connect(u2).submitRedemption(b2.address, 20);
+    expect(await HoneyToken.balanceOf(u1.address)).to.equal(0);
+    expect(await HoneyToken.balanceOf(u2.address)).to.equal(0);
+
+    await HoneyMarketplace.connect(b1).fulfillRedemption(0, "ABC");
+    await HoneyMarketplace.connect(b2).fulfillRedemption(0, "DEF");
+    expect(await HoneyToken.balanceOf(await HoneyMarketplace.getAddress())).to.equal(0);
+
 
   });
 });
