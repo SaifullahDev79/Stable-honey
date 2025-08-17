@@ -63,6 +63,13 @@ describe('HoneyMarketplace', async () => {
     expect(await HoneyToken.balanceOf(b2.address)).to.equal(180);
     expect(await HoneyToken.balanceOf(await HoneyMarketplace.getAddress())).to.equal(30);
 
+    await USDC.connect(u1).approve(await HoneyMarketplace.getAddress(), 10);
+    await USDC.connect(u2).approve(await HoneyMarketplace.getAddress(), 20);
+    await HoneyMarketplace.connect(u1).buyHoney(await USDC.getAddress(), b1.address, 10);
+    await HoneyMarketplace.connect(u2).buyHoney(await USDC.getAddress(), b2.address, 20);
+    expect(await HoneyToken.balanceOf(u1.address)).to.equal(10);
+    expect(await HoneyToken.balanceOf(u2.address)).to.equal(20);
+
   });
 });
 
