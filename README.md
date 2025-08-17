@@ -206,6 +206,10 @@ Stable-honey/
 - Hardhat for development and testing
 - ERC20 standard compliance
 
+### Smart Contract Notes
+
+Run `npx hardhat verify --network sepolia [addr]` to verify on Etherscan, requires config.
+
 ## Future Integrations
 
 The following integrations are planned for future versions:
@@ -228,3 +232,4 @@ This project is licensed under the MIT License.
 ## Support
 
 For questions or support, please open an issue in the repository.
+
