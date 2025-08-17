@@ -6,8 +6,8 @@ const Header = ({ walletConnected, userAddress, connectWallet, disconnectWallet,
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <Link to="/" className="logo">
-        <div className="logo-icon">🐝</div>
-        HoneyCoin
+        <div className="logo-icon">🍯</div>
+        StableHoney
       </Link>
 
       <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>

@@ -175,62 +175,6 @@ const UserDashboard = ({ userAddress, authenticated, wallets }) => {
           </form>
         </div>
 
-        {/* My Redemption Requests */}
-        <div className="dashboard-card">
-          <h2 className="card-title">My Redemption Requests</h2>
-          {redemptionRequests.filter(req => req.userId === userAddress).length === 0 ? (
-            <p>No redemption requests found</p>
-          ) : (
-            redemptionRequests
-              .filter(req => req.userId === userAddress)
-              .map((request) => (
-                <div key={request.id} className="list-item">
-                  <div className="list-item-title">
-                    Request #{request.id}
-                    <span className={`status-badge ${request.fulfilled ? 'status-fulfilled' : 'status-pending'}`}>
-                      {request.fulfilled ? 'Fulfilled' : 'Pending'}
-                    </span>
-                  </div>
-                  <div className="list-item-details">
-                    Amount: {request.amount} HNY<br />
-                    Delivery: {request.deliveryDetails}<br />
-                    Beekeeper Address: {request.beekeeperAddress}<br />
-                    Requested: {new Date(request.timestamp).toLocaleDateString()}
-                    {request.fulfilled && (
-                      <>
-                        <br />Fulfilled: {new Date(request.fulfillmentTimestamp).toLocaleDateString()}
-                        {request.qrCodeHash && <><br />QR Code: {request.qrCodeHash}</>}
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))
-          )}
-        </div>
-
-        {/* Available Honey Batches */}
-        <div className="dashboard-card">
-          <h2 className="card-title">Available Honey Batches</h2>
-          {honeyBatches.filter(batch => !batch.redeemed).length === 0 ? (
-            <p>No available honey batches</p>
-          ) : (
-            honeyBatches
-              .filter(batch => !batch.redeemed)
-              .map((batch) => (
-                <div key={batch.id} className="list-item">
-                  <div className="list-item-title">
-                    Batch #{batch.id}
-                    <span className="status-badge status-pending">Available</span>
-                  </div>
-                  <div className="list-item-details">
-                    Amount: {batch.amount} HNY<br />
-                    QR Hash: {batch.qrCodeHash}<br />
-                    Created: {new Date(batch.timestamp).toLocaleDateString()}
-                  </div>
-                </div>
-              ))
-          )}
-        </div>
       </div>
     </div>
   );

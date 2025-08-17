@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import map from '../assets/Selection_2009.png';
 
 const LandingPage = () => {
   return (
@@ -7,10 +8,10 @@ const LandingPage = () => {
       <div className="hero-section">
         <h1 className="hero-title">Stablecoin Backed by Honey</h1>
         <p className="hero-description">
-          Swap PayPal USD for HNY coin, backed by real-world honey from local beekeepers.
+          Swap USD Stablecoins for HNY coin, backed by real-world honey from local beekeepers.
         </p>
         <Link to="/user">
-          <button className="invest-btn">Invest in Beehive Ops</button>
+          <button className="invest-btn">Invest in Beehives</button>
         </Link>
       </div>
       
@@ -19,13 +20,10 @@ const LandingPage = () => {
           <div className="map-container">
             <div className="map-outline">
               {/* Map pins representing beehive locations */}
-              <div className="map-pin pin-1"></div>
-              <div className="map-pin pin-2"></div>
-              <div className="map-pin pin-3"></div>
-              <div className="map-pin pin-4"></div>
+              <img src={map} width='500px'/>
             </div>
           </div>
-          <p className="map-label">Map beehive farms</p>
+          <p className="map-label">Map of beehive farms</p>
         </div>
         
         <div className="info-boxes">
@@ -36,12 +34,12 @@ const LandingPage = () => {
           
           <div className="info-box">
             <h3 className="info-box-title">Beekeeper Rate</h3>
-            <p className="info-box-description">Fixed pay rate for 50 HNY</p>
+            <p className="info-box-description">Fixed pay rate for 10 HNY</p>
           </div>
           
           <div className="info-box">
             <h3 className="info-box-title">Authentication</h3>
-            <p className="info-box-description">Photo proof required within 30 days</p>
+            <p className="info-box-description">Photo proof required every 30 days</p>
           </div>
         </div>
       </div>

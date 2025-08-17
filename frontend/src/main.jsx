@@ -7,6 +7,7 @@ import { PrivyProvider } from '@privy-io/react-auth'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <title>StableHoney</title>
     <PrivyProvider
       appId={import.meta.env.VITE_PRIVY_APP_ID}
       config={{

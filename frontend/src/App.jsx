@@ -191,7 +191,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/farm" element={<FarmDashboard userAddress={userAddress} handleMintHoneyClick={handleMintHoneyClick} setMintHoneyAmount={setMintHoneyAmount} setMintHoneyId={setMintHoneyId} mintHoneyTx={mintHoneyTx} mintHoneyId={mintHoneyId} mintHoneyAmount={mintHoneyAmount} />} />
+          <Route path="/farm" element={<FarmDashboard userAddress={userAddress} handleMintHoneyClick={handleMintHoneyClick} setMintHoneyAmount={setMintHoneyAmount} setMintHoneyId={setMintHoneyId} mintHoneyTx={mintHoneyTx} mintHoneyId={mintHoneyId} mintHoneyAmount={mintHoneyAmount} authenticated={authenticated} wallets={wallets}/>} />
           <Route path="/user" element={<UserDashboard userAddress={userAddress} authenticated={authenticated} wallets={wallets} />} />
           <Route path="/apply-beekeeper" element={<BeekeeperApplicationForm />} />
         </Routes>

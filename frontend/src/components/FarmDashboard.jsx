@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers'
 import {HONEYMARKETPLACE_ADDRESS, HONEYMARKETPLACE_ABI, HONEYTOKEN_ADDRESS, HONEYTOKEN_ABI, USDC_ADDRESS, ERC20_ABI} from '../common'
 
-const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMintHoneyId, setMintHoneyAmount, mintHoneyId, mintHoneyAmount }) => {
+const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMintHoneyId, setMintHoneyAmount, mintHoneyId, mintHoneyAmount, authenticated, wallets}) => {
   const [honeyBatches, setHoneyBatches] = useState([]);
   const [redemptionRequests, setRedemptionRequests] = useState([]);
   const [mintForm, setMintForm] = useState({
@@ -32,6 +32,21 @@ const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMint
         fetchData();
         alert('Redemption request fulfilled successfully!');
       }*/
+      if (!authenticated) {
+        console.log("privy not initialized yet");
+        return;
+      }
+      const provider = new ethers.BrowserProvider(await wallets[0].getEthereumProvider());
+      const signer = await provider.getSigner();
+    
+      const contract = new ethers.Contract(HONEYMARKETPLACE_ADDRESS, HONEYMARKETPLACE_ABI, signer);
+    
+      const tx = await contract.fulfillRedemption(fulfillForm.consumerId, fulfillForm.honeyId);
+      console.log(tx.hash);
+      setFulfillForm({ consumerId: '', honeyId: '' });
+      //fetchData();
+      alert(`Redemption fulfilled successfully! Tx hash: ${tx}`);
+
     } catch (error) {
       console.error('Error fulfilling redemption:', error);
       alert('Error fulfilling redemption request');
@@ -106,55 +121,6 @@ const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMint
           </form>
         </div>
 
-        {/* Honey Batches List */}
-        <div className="dashboard-card">
-          <h2 className="card-title">Honey Batches</h2>
-          {honeyBatches.length === 0 ? (
-            <p>No honey batches found</p>
-          ) : (
-            honeyBatches.map((batch) => (
-              <div key={batch.id} className="list-item">
-                <div className="list-item-title">
-                  Batch #{batch.id}
-                  <span className={`status-badge ${batch.redeemed ? 'status-fulfilled' : 'status-pending'}`}>
-                    {batch.redeemed ? 'Redeemed' : 'Available'}
-                  </span>
-                </div>
-                <div className="list-item-details">
-                  Amount: {batch.amount} HNY<br />
-                  QR Hash: {batch.qrCodeHash}<br />
-                  Created: {new Date(batch.timestamp).toLocaleDateString()}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Redemption Requests List */}
-        <div className="dashboard-card">
-          <h2 className="card-title">Redemption Requests</h2>
-          {redemptionRequests.length === 0 ? (
-            <p>No redemption requests found</p>
-          ) : (
-            redemptionRequests.map((request) => (
-              <div key={request.id} className="list-item">
-                <div className="list-item-title">
-                  Request #{request.id}
-                  <span className={`status-badge ${request.fulfilled ? 'status-fulfilled' : 'status-pending'}`}>
-                    {request.fulfilled ? 'Fulfilled' : 'Pending'}
-                  </span>
-                </div>
-                <div className="list-item-details">
-                  User: {request.userId}<br />
-                  Amount: {request.amount} HNY<br />
-                  Delivery: {request.deliveryDetails}<br />
-                  Pickup: {request.pickupDetails}<br />
-                  Requested: {new Date(request.timestamp).toLocaleDateString()}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
       </div>
     </div>
   );
