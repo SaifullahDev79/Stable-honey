@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const FarmDashboard = ({ userAddress }) => {
+const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMintHoneyId, setMintHoneyAmount, mintHoneyId, mintHoneyAmount }) => {
   const [honeyBatches, setHoneyBatches] = useState([]);
   const [redemptionRequests, setRedemptionRequests] = useState([]);
   const [mintForm, setMintForm] = useState({
@@ -14,26 +14,12 @@ const FarmDashboard = ({ userAddress }) => {
     qrCodeHash: ''
   });
 
-  const API_BASE_URL = 'http://localhost:3001/api';
-
   useEffect(() => {
-    fetchData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const [batchesRes, requestsRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/honey-batches`),
-        axios.get(`${API_BASE_URL}/redemption-requests`)
-      ]);
-      setHoneyBatches(batchesRes.data);
-      setRedemptionRequests(requestsRes.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
 
   const handleMintHoney = async (e) => {
+/*
     e.preventDefault();
     try {
       const response = await axios.post(`${API_BASE_URL}/honey-batches`, {
@@ -50,11 +36,12 @@ const FarmDashboard = ({ userAddress }) => {
     } catch (error) {
       console.error('Error minting honey:', error);
       alert('Error creating honey batch');
-    }
+    }*/
   };
 
   const handleFulfillRedemption = async (e) => {
     e.preventDefault();
+/*
     try {
       const response = await axios.put(`${API_BASE_URL}/redemption-requests/${fulfillForm.requestId}/fulfill`, {
         batchId: fulfillForm.batchId,
@@ -69,7 +56,7 @@ const FarmDashboard = ({ userAddress }) => {
     } catch (error) {
       console.error('Error fulfilling redemption:', error);
       alert('Error fulfilling redemption request');
-    }
+    }*/
   };
 
   return (
@@ -80,14 +67,14 @@ const FarmDashboard = ({ userAddress }) => {
         {/* Mint Honey Section */}
         <div className="dashboard-card">
           <h2 className="card-title">Mint Honey Tokens</h2>
-          <form onSubmit={handleMintHoney}>
+          <form onSubmit={handleMintHoneyClick}>
             <div className="form-group">
               <label className="form-label">Amount (HNY)</label>
               <input
                 type="number"
                 className="form-input"
-                value={mintForm.amount}
-                onChange={(e) => setMintForm({ ...mintForm, amount: e.target.value })}
+                value={mintHoneyAmount}
+                onChange={(e) => setMintHoneyAmount(e.target.value)}
                 placeholder="Enter amount"
                 required
               />
@@ -97,14 +84,15 @@ const FarmDashboard = ({ userAddress }) => {
               <input
                 type="text"
                 className="form-input"
-                value={mintForm.qrCodeHash}
-                onChange={(e) => setMintForm({ ...mintForm, qrCodeHash: e.target.value })}
+                value={mintHoneyId}
+                onChange={(e) => setMintHoneyId(e.target.value)}
                 placeholder="Enter QR code hash"
                 required
               />
             </div>
             <button type="submit" className="submit-btn">Mint Honey Tokens</button>
           </form>
+          <span>{mintHoneyTx}</span>
         </div>
 
         {/* Fulfill Redemption Section */}

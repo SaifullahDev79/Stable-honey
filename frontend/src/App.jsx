@@ -8,6 +8,8 @@ import FarmDashboard from './components/FarmDashboard'
 import UserDashboard from './components/UserDashboard'
 import BeekeeperApplicationForm from './components/BeekeeperApplicationForm'
 import './App.css'
+import {UserTypes} from './common'
+
 
 // 👇 NEW: Privy + ethers
 import { usePrivy, useWallets } from '@privy-io/react-auth'
@@ -17,20 +19,19 @@ import { ethers } from 'ethers'
 const CHAIN_ID = Number(import.meta.env.VITE_CHAIN_ID || 11155111)
 
 // HNY Token Contract ABI (minimal for balance checking)
-const HNY_TOKEN_ABI = [
-  "function balanceOf(address owner) view returns (uint256)",
-  "function decimals() view returns (uint8)",
-  "function symbol() view returns (string)"
-]
+import HoneyTokenJSON from '../../sol/artifacts/contracts/HoneyToken.sol/HoneyToken.json';
+const HNY_TOKEN_ABI = HoneyTokenJSON.abi;
 
-// HNY Token Contract Address (you'll need to deploy and update this)
-const HNY_TOKEN_ADDRESS = "0x0000000000000000000000000000000000000000" // Placeholder - update with actual deployed address
+// HNY Token Contract Address
+const HNY_TOKEN_ADDRESS = "0x3df572Ae28E17D93D046D1a17Ff98C63365aE73c";
 
 function App() {
   const [userAddress, setUserAddress] = useState('')
   const [walletConnected, setWalletConnected] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [hnyBalance, setHnyBalance] = useState('0')
+
+  const [userType, setUserType] = useState(UserTypes.BEEKEEPER);
 
   // 👇 NEW: Privy hooks
   const { ready, authenticated, login, logout } = usePrivy()
@@ -73,16 +74,19 @@ function App() {
       setWalletConnected(true)
 
       // Fetch HNY token balance
+      const hnyContract = new ethers.Contract(HNY_TOKEN_ADDRESS, HNY_TOKEN_ABI, provider)
       try {
-        const hnyContract = new ethers.Contract(HNY_TOKEN_ADDRESS, HNY_TOKEN_ABI, provider)
         const balance = await hnyContract.balanceOf(addr)
-        const decimals = await hnyContract.decimals()
-        const formattedBalance = ethers.formatUnits(balance, decimals)
-        setHnyBalance(formattedBalance)
+        console.log(`BALANCE ${balance}`)
+        setHnyBalance(balance)
       } catch (error) {
         console.log('Could not fetch HNY balance (contract may not be deployed):', error.message)
         setHnyBalance('0')
       }
+
+      const isBeekeeper = await hnyContract.beekeepers(addr);
+      console.log(`ARE YOU A BEEKEEPER?? ${isBeekeeper}`)
+      isBeekeeper ? setUserType(UserTypes.BEEKEEPER) : setUserType(UserTypes.CONSUMER);
     })()
   }, [ready, authenticated, walletsReady, wallets])
 
@@ -100,6 +104,41 @@ function App() {
     setHnyBalance('0')
   }
 
+/**
+ * Added functionality
+ */
+
+  const [mintHoneyTxAttQ, setMintHoneyTxQ] = useState('');
+  const [mintHoneyTx, setMintHoneyTx] = useState('');
+  const [mintHoneyAmount, setMintHoneyAmount] = useState('');
+  const [mintHoneyId, setMintHoneyId] = useState('');
+
+  const mintHoney = async (amount, honeyId) => {
+    if (!authenticated) {
+      console.log("privy not initialized yet");
+      return;
+    }
+    const provider = new ethers.BrowserProvider(await wallets[0].getEthereumProvider());
+    const signer = await provider.getSigner();
+  
+    const contractAddress = "0x3b01E4025B428fFad9481a500BAc36396719092C"; 
+    const contract = new ethers.Contract(HNY_TOKEN_ADDRESS, HNY_TOKEN_ABI, signer);
+  
+    // Send a transaction to smart contract to update the value
+    const tx = await contract.mint(amount, honeyId);
+    console.log(tx.hash);
+    setMintHoneyTx(tx.hash);
+  };
+  
+  React.useEffect(() => {
+    mintHoney(mintHoneyAmount, mintHoneyId);
+  }, [mintHoneyTxAttQ]);
+
+  const handleMintHoneyClick = (e) => {
+    e.preventDefault();
+    setMintHoneyTxQ(mintHoneyAmount+mintHoneyId);
+  };
+
   return (
     <Router>
       <div className="App">
@@ -110,12 +149,13 @@ function App() {
           disconnectWallet={disconnectWallet}
           isScrolled={isScrolled}
           hnyBalance={hnyBalance}
+          userType={userType}
         />
 
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/farm" element={<FarmDashboard userAddress={userAddress} />} />
+          <Route path="/farm" element={<FarmDashboard userAddress={userAddress} handleMintHoneyClick={handleMintHoneyClick} setMintHoneyAmount={setMintHoneyAmount} setMintHoneyId={setMintHoneyId} mintHoneyTx={mintHoneyTx} mintHoneyId={mintHoneyId} mintHoneyAmount={mintHoneyAmount} />} />
           <Route path="/user" element={<UserDashboard userAddress={userAddress} />} />
           <Route path="/apply-beekeeper" element={<BeekeeperApplicationForm />} />
         </Routes>

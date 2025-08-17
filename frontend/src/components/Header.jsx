@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {UserTypes} from '../common'
 
-const Header = ({ walletConnected, userAddress, connectWallet, disconnectWallet, isScrolled, hnyBalance }) => {
+const Header = ({ walletConnected, userAddress, connectWallet, disconnectWallet, isScrolled, hnyBalance, userType }) => {
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <Link to="/" className="logo">
@@ -25,30 +26,20 @@ const Header = ({ walletConnected, userAddress, connectWallet, disconnectWallet,
 
         {walletConnected && (
           <>
-            <Link
-              to="/user"
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                padding: '0.5rem 1rem',
-                borderRadius: '4px',
-                backgroundColor: 'rgba(255,255,255,0.1)',
-              }}
-            >
+           {userType == UserTypes.CONSUMER ? (
+             <>
+              <Link
+                to="/user"
+                style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '4px',
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                }}
+              >
               User Dashboard
-            </Link>
-            <Link
-              to="/farm"
-              style={{
-                color: 'white',
-                textDecoration: 'none',
-                padding: '0.5rem 1rem',
-                borderRadius: '4px',
-                backgroundColor: 'rgba(255,255,255,0.1)',
-              }}
-            >
-              Farm Dashboard
-            </Link>
+              </Link>
             <Link
               to="/apply-beekeeper"
               style={{
@@ -61,6 +52,24 @@ const Header = ({ walletConnected, userAddress, connectWallet, disconnectWallet,
             >
               Become a Beekeeper
             </Link>
+             </>
+           ) : 
+             (
+               <>
+            <Link
+              to="/farm"
+              style={{
+                color: 'white',
+                textDecoration: 'none',
+                padding: '0.5rem 1rem',
+                borderRadius: '4px',
+                backgroundColor: 'rgba(255,255,255,0.1)',
+              }}
+            >
+              Farm Dashboard
+            </Link>
+               </>
+             )}
 
             {/* 👇 HNY Balance badge */}
             <span
