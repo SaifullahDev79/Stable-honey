@@ -35,6 +35,7 @@ contract HoneyMarketplace {
 
     function offerHoney(uint256 amount) public onlyBeekeeper {
         honeyMarketplace[msg.sender] += amount;
+        emit OfferedHoney(msg.sender, amount);
         HoneyToken(HONEYTOKEN_ADDRESS).transferFrom(msg.sender, address(this), amount);
     }
 
@@ -42,9 +43,11 @@ contract HoneyMarketplace {
         require(stablecoin == USDC_ADDRESS || stablecoin == DAI_ADDRESS ||
                stablecoin == TEST_DAI_ADDRESS);
         require(honeyAmount >= honeyMarketplace[beekeeper]);
-        ERC20(stablecoin).transferFrom(msg.sender, beekeeper, honeyAmount * USD_HONEY_RATE);
+        uint256 usdAmount = honeyAmount * USD_HONEY_RATE;
+        ERC20(stablecoin).transferFrom(msg.sender, beekeeper, usdAmount);
         HoneyToken(HONEYTOKEN_ADDRESS).transfer(msg.sender, honeyAmount);
         honeyMarketplace[beekeeper] -= honeyAmount;
+        emit BoughtHoney(msg.sender, stablecoin, beekeeper, honeyAmount, usdAmount);
     }
 
     function submitRedemption(address beekeeper, uint256 honeyAmount) public {
@@ -52,12 +55,18 @@ contract HoneyMarketplace {
         redemptionRequests[beekeeper].push(RedemptionRequest({
             consumer: msg.sender, amount: honeyAmount
         }));
+        emit SubmitRedemption(msg.sender, beekeeper, honeyAmount);
     }
 
     function fulfillRedemption(uint256 consumerId, string calldata honeyId) public {
         require(redemptionRequests[msg.sender].length != 0, 'notzero');
         HoneyToken(HONEYTOKEN_ADDRESS).burn(redemptionRequests[msg.sender][consumerId].amount, honeyId);
+        emit FulfillRedemption(msg.sender, consumerId, redemptionRequests[msg.sender][consumerId].consumer, honeyId);
         delete redemptionRequests[msg.sender][consumerId];
     }
 
+    event OfferedHoney(address beekeeper, uint256 honeyAmount);
+    event BoughtHoney(address consumer, address stablecoin, address beekeeper, uint256 honeyAmount, uint256 usdAmount);
+    event SubmitRedemption(address consumer, address beekeeper, uint256 honeyAmount);
+    event FulfillRedemption(address beekeeper, uint256 consumerId, address consumer, string honeyId);
 }

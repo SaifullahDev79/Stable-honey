@@ -20,6 +20,7 @@ contract HoneyToken is ERC20, Ownable {
 
     function addBeekeeper(address beekeper) public onlyOwner {
         beekeepers[beekeper] = true;
+        emit AddedBeekeeper(beekeper);
     }
 
     function mint(uint256 amount, string calldata honeyId) public onlyBeekeeper {
@@ -32,6 +33,7 @@ contract HoneyToken is ERC20, Ownable {
         emit Burn(msg.sender, amount, honeyId);
     }
 
+    event AddedBeekeeper(address beekeeper);
     event Mint(address minter, uint256 amount, string honeyId);
     event Burn(address burner, uint256 amount, string honeyId);
 }
