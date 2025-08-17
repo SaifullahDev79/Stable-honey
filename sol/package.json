@@ -4,6 +4,9 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run scripts/deploy.js --network sepolia",
+    "deploy-usdc": "npx hardhat run scripts/deploy-usdc.js --network sepolia",
+    "setup": "npx hardhat run scripts/setup.js --network sepolia",
+    "setup-usdc": "npx hardhat run scripts/setup-usdc.js --network sepolia",
     "test": "npx hardhat test"
   },
   "devDependencies": {

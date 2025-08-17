@@ -92,7 +92,9 @@ const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMint
             </div>
             <button type="submit" className="submit-btn">Mint Honey Tokens</button>
           </form>
-          <span>{mintHoneyTx}</span>
+          { mintHoneyTx &&
+            ( 
+              <a href={`https://sepolia.etherscan.io/tx/${mintHoneyTx}`}>Tx: {mintHoneyTx.substring(0,16)}...</a> )}
         </div>
 
         {/* Fulfill Redemption Section */}

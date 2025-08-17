@@ -23,7 +23,7 @@ import HoneyTokenJSON from '../../sol/artifacts/contracts/HoneyToken.sol/HoneyTo
 const HNY_TOKEN_ABI = HoneyTokenJSON.abi;
 
 // HNY Token Contract Address
-const HNY_TOKEN_ADDRESS = "0x3df572Ae28E17D93D046D1a17Ff98C63365aE73c";
+const HNY_TOKEN_ADDRESS = "0xa2DC60D5d3A7a977787365C5815Ae5F2DEeF4D22";
 
 function App() {
   const [userAddress, setUserAddress] = useState('')
@@ -89,6 +89,44 @@ function App() {
       isBeekeeper ? setUserType(UserTypes.BEEKEEPER) : setUserType(UserTypes.CONSUMER);
     })()
   }, [ready, authenticated, walletsReady, wallets])
+
+  /*Need to make this rely on a tx var for this to work*/
+  useEffect(() => {
+    (async () => {
+      if (!ready || !walletsReady) return
+
+      const w = wallets[0]
+      if (!authenticated || !w) {
+        setUserAddress('')
+        setWalletConnected(false)
+        setHnyBalance('0')
+        return
+      }
+
+      // Try switching to your target chain (optional but recommended)
+      try {
+        await w.switchChain(`eip155:${CHAIN_ID}`)
+      } catch {
+        // ignore if user rejects or chain already set
+      }
+
+      // Turn Privy wallet into an ethers v6 signer to read address
+      const eip1193 = await w.getEthereumProvider()
+      const provider = new ethers.BrowserProvider(eip1193)
+      const signer = await provider.getSigner()
+      const addr = await signer.getAddress()
+
+      // Fetch HNY token balance
+      const hnyContract = new ethers.Contract(HNY_TOKEN_ADDRESS, HNY_TOKEN_ABI, provider)
+      try {
+        const balance = await hnyContract.balanceOf(addr)
+        setHnyBalance(balance)
+      } catch (error) {
+        console.log('Could not fetch HNY balance (contract may not be deployed):', error.message)
+        setHnyBalance('0')
+      }
+    })()
+  });
 
   // 👇 Replace your old MetaMask connect with Privy login
   const connectWallet = async () => {
