@@ -16,3 +16,7 @@ User has two actions (buying HNY, submitting redemption request)
 Additional Integrations:
 * PaypalUSD (for buying the HoneyToken)
 * Walrus (for storing the image)
+
+## Smart Contracts
+
+Run `npx hardhat verify --network sepolia [addr]` to verify on Etherscan, requires config
