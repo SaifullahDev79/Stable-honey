@@ -30,6 +30,10 @@ contract HoneyToken is ERC20, Ownable, ReentrancyGuard {
     uint256 public redemptionRequestCounter;
     uint256 public honeyBatchCounter;
     
+    // Price information: 1 HNY = $10 PYUSD
+    uint256 public constant HNY_PRICE_USD = 10; // $10 per HNY token
+    string public constant PRICE_CURRENCY = "PYUSD";
+    
     event HoneyMinted(uint256 batchId, uint256 amount, string qrCodeHash, address farm);
     event RedemptionRequested(uint256 requestId, address user, uint256 amount, string deliveryDetails, string pickupDetails);
     event RedemptionFulfilled(uint256 requestId, uint256 batchId, string qrCodeHash, address farm);
@@ -136,5 +140,13 @@ contract HoneyToken is ERC20, Ownable, ReentrancyGuard {
             batch.timestamp,
             batch.redeemed
         );
+    }
+    
+    function getTokenPrice() external pure returns (uint256 price, string memory currency) {
+        return (HNY_PRICE_USD, PRICE_CURRENCY);
+    }
+    
+    function calculateUSDValue(uint256 hnyAmount) external pure returns (uint256 usdValue) {
+        return hnyAmount * HNY_PRICE_USD;
     }
 }

@@ -2,6 +2,8 @@
 
 A decentralized application (dApp) that allows users to invest in honey-backed tokens (HNY) and redeem them for real honey from local beekeepers.
 
+**Token Price: 1 HNY = $10 PYUSD**
+
 ## Project Structure
 
 ```
@@ -43,13 +45,14 @@ Stable-honey/
 ## Features
 
 ### Version 1 MVP Features:
-- **HoneyToken (HNY)**: ERC20 token backed by real honey
+- **HoneyToken (HNY)**: ERC20 token backed by real honey (1 HNY = $10 PYUSD)
 - **Farm Operations**: 
   - Mint honey tokens with QR code verification
   - Fulfill redemption requests
 - **User Operations**:
   - Buy honey tokens (placeholder for PayPal USD integration)
   - Submit redemption requests with delivery/pickup details
+- **Beekeeper Application**: Comprehensive application form for new beekeepers
 - **Backend API**: Handles delivery/pickup information and file uploads
 - **Modern UI**: Clean, responsive design with centered layout and full-width header
 
@@ -59,6 +62,8 @@ Stable-honey/
 - Honey batch management with QR code hashes
 - Redemption request system
 - Secure minting and burning operations
+- Price management (1 HNY = $10 PYUSD)
+- Price calculation functions
 
 ## Quick Start
 
@@ -158,6 +163,8 @@ Stable-honey/
 - `mintHoney(uint256 amount, string qrCodeHash)` - Mint tokens for honey batch
 - `submitRedeem(uint256 amount, string deliveryDetails, string pickupDetails)` - Submit redemption request
 - `fulfillRedeem(uint256 requestId, uint256 batchId, string qrCodeHash)` - Fulfill redemption request
+- `getTokenPrice()` - Get current token price (1 HNY = $10 PYUSD)
+- `calculateUSDValue(uint256 hnyAmount)` - Calculate USD value for HNY amount
 
 ## UI/UX Improvements
 
