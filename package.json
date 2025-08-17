@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@privy-io/react-auth": "^2.21.3",
+    "ethers": "^6.15.0"
+  }
+}
