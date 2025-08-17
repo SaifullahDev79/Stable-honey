@@ -102,7 +102,7 @@ export default function SolanaBuy({ userAddress }) {
           placeholder="Amount (e.g., 10)"
           style={{ padding: '6px 8px' }}
         />
-        <button onClick={createIntent} disabled={!userAddress || status === 'pending'}>
+        <button onClick={/*createIntent*/()=>{}} disabled={!userAddress || status === 'pending'}>
           Create Intent
         </button>
       </div>

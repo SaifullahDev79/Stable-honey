@@ -8,7 +8,7 @@ import FarmDashboard from './components/FarmDashboard'
 import UserDashboard from './components/UserDashboard'
 import BeekeeperApplicationForm from './components/BeekeeperApplicationForm'
 import './App.css'
-import {UserTypes} from './common'
+import {UserTypes, HONEYTOKEN_ADDRESS, HONEYTOKEN_ABI} from './common'
 
 
 // 👇 NEW: Privy + ethers
@@ -19,11 +19,10 @@ import { ethers } from 'ethers'
 const CHAIN_ID = Number(import.meta.env.VITE_CHAIN_ID || 11155111)
 
 // HNY Token Contract ABI (minimal for balance checking)
-import HoneyTokenJSON from '../../sol/artifacts/contracts/HoneyToken.sol/HoneyToken.json';
-const HNY_TOKEN_ABI = HoneyTokenJSON.abi;
+const HNY_TOKEN_ABI = HONEYTOKEN_ABI;
 
 // HNY Token Contract Address
-const HNY_TOKEN_ADDRESS = "0xa2DC60D5d3A7a977787365C5815Ae5F2DEeF4D22";
+const HNY_TOKEN_ADDRESS = HONEYTOKEN_ADDRESS;
 
 function App() {
   const [userAddress, setUserAddress] = useState('')
@@ -159,7 +158,6 @@ function App() {
     const provider = new ethers.BrowserProvider(await wallets[0].getEthereumProvider());
     const signer = await provider.getSigner();
   
-    const contractAddress = "0x3b01E4025B428fFad9481a500BAc36396719092C"; 
     const contract = new ethers.Contract(HNY_TOKEN_ADDRESS, HNY_TOKEN_ABI, signer);
   
     // Send a transaction to smart contract to update the value
@@ -194,7 +192,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/farm" element={<FarmDashboard userAddress={userAddress} handleMintHoneyClick={handleMintHoneyClick} setMintHoneyAmount={setMintHoneyAmount} setMintHoneyId={setMintHoneyId} mintHoneyTx={mintHoneyTx} mintHoneyId={mintHoneyId} mintHoneyAmount={mintHoneyAmount} />} />
-          <Route path="/user" element={<UserDashboard userAddress={userAddress} />} />
+          <Route path="/user" element={<UserDashboard userAddress={userAddress} authenticated={authenticated} wallets={wallets} />} />
           <Route path="/apply-beekeeper" element={<BeekeeperApplicationForm />} />
         </Routes>
       </div>

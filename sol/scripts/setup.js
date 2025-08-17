@@ -10,15 +10,15 @@ const main = async () => {
   await HoneyToken.addBeekeeper(b1.address);
   await HoneyToken.addBeekeeper(b2.address);
   await HoneyToken.addBeekeeper(HONEYMARKETPLACE_ADDRESS); /* This is a really important line to get this all to work for our implementation!!! */
-  console.log("b1 and b2 mint 5000 HNY", u1.address, u2.address);
-  await HoneyToken.connect(b1).mint(5000, "A2E4");
-  await HoneyToken.connect(b2).mint(5000, "B2E4");
+  console.log("b1 and b2 mint 500 HNY", u1.address, u2.address);
+  await HoneyToken.connect(b1).mint(500, "A2E4");
+  await HoneyToken.connect(b2).mint(500, "B2E4");
 
-  console.log('b1 and b2 put 3000 HNY for sale')
-  await HoneyToken.connect(b1).approve(HONEYMARKETPLACE_ADDRESS, 3000);
-  await HoneyToken.connect(b2).approve(HONEYMARKETPLACE_ADDRESS, 3000);
-  await HoneyMarketplace.connect(b1).offerHoney(3000);
-  await HoneyMarketplace.connect(b2).offerHoney(3000);
+  console.log('b1 and b2 put 300 HNY for sale')
+  await HoneyToken.connect(b1).approve(HONEYMARKETPLACE_ADDRESS, 300);
+  await HoneyToken.connect(b2).approve(HONEYMARKETPLACE_ADDRESS, 300);
+  await HoneyMarketplace.connect(b1).offerHoney(300);
+  await HoneyMarketplace.connect(b2).offerHoney(300);
 
   console.log('u1 and u2 buy 150 HNY for sale');
   await USDC.connect(u1).approve(HONEYMARKETPLACE_ADDRESS, 150);

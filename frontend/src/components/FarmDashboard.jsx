@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { ethers } from 'ethers'
+import {HONEYMARKETPLACE_ADDRESS, HONEYMARKETPLACE_ABI, HONEYTOKEN_ADDRESS, HONEYTOKEN_ABI, USDC_ADDRESS, ERC20_ABI} from '../common'
 
 const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMintHoneyId, setMintHoneyAmount, mintHoneyId, mintHoneyAmount }) => {
   const [honeyBatches, setHoneyBatches] = useState([]);
@@ -9,40 +10,18 @@ const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMint
     qrCodeHash: ''
   });
   const [fulfillForm, setFulfillForm] = useState({
-    requestId: '',
-    batchId: '',
-    qrCodeHash: ''
+    consumerId: '',
+    honeyId: '',
   });
 
   useEffect(() => {
   }, []);
 
 
-  const handleMintHoney = async (e) => {
-/*
-    e.preventDefault();
-    try {
-      const response = await axios.post(`${API_BASE_URL}/honey-batches`, {
-        farmId: userAddress,
-        amount: parseInt(mintForm.amount),
-        qrCodeHash: mintForm.qrCodeHash
-      });
-      
-      if (response.data.success) {
-        setMintForm({ amount: '', qrCodeHash: '' });
-        fetchData();
-        alert('Honey batch created successfully!');
-      }
-    } catch (error) {
-      console.error('Error minting honey:', error);
-      alert('Error creating honey batch');
-    }*/
-  };
-
   const handleFulfillRedemption = async (e) => {
     e.preventDefault();
-/*
     try {
+      /*
       const response = await axios.put(`${API_BASE_URL}/redemption-requests/${fulfillForm.requestId}/fulfill`, {
         batchId: fulfillForm.batchId,
         qrCodeHash: fulfillForm.qrCodeHash
@@ -52,11 +31,11 @@ const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMint
         setFulfillForm({ requestId: '', batchId: '', qrCodeHash: '' });
         fetchData();
         alert('Redemption request fulfilled successfully!');
-      }
+      }*/
     } catch (error) {
       console.error('Error fulfilling redemption:', error);
       alert('Error fulfilling redemption request');
-    }*/
+    }
   };
 
   return (
@@ -102,35 +81,24 @@ const FarmDashboard = ({ userAddress, handleMintHoneyClick, mintHoneyTx, setMint
           <h2 className="card-title">Fulfill Redemption Request</h2>
           <form onSubmit={handleFulfillRedemption}>
             <div className="form-group">
-              <label className="form-label">Request ID</label>
+              <label className="form-label">Consumer ID</label>
               <input
                 type="number"
                 className="form-input"
-                value={fulfillForm.requestId}
-                onChange={(e) => setFulfillForm({ ...fulfillForm, requestId: e.target.value })}
-                placeholder="Enter request ID"
+                value={fulfillForm.consumerId}
+                onChange={(e) => setFulfillForm({ ...fulfillForm, consumerId: e.target.value })}
+                placeholder="Enter consumer ID"
                 required
               />
             </div>
             <div className="form-group">
-              <label className="form-label">Batch ID</label>
-              <input
-                type="number"
-                className="form-input"
-                value={fulfillForm.batchId}
-                onChange={(e) => setFulfillForm({ ...fulfillForm, batchId: e.target.value })}
-                placeholder="Enter batch ID"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">QR Code Hash</label>
+              <label className="form-label">Honey ID (QR Code/NFC/Identifier)</label>
               <input
                 type="text"
                 className="form-input"
-                value={fulfillForm.qrCodeHash}
-                onChange={(e) => setFulfillForm({ ...fulfillForm, qrCodeHash: e.target.value })}
-                placeholder="Enter QR code hash"
+                value={fulfillForm.honeyId}
+                onChange={(e) => setFulfillForm({ ...fulfillForm, honeyId: e.target.value })}
+                placeholder="Enter honey ID"
                 required
               />
             </div>
