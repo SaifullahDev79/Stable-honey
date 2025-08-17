@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const DEMO_MODE = String(import.meta.env.VITE_DEMO_MODE || '').toLowerCase() === 'true';
-
+/*
 // a simple inline “QR” placeholder (svg data url)
 const DUMMY_QR =
   'data:image/svg+xml;utf8,' +
@@ -14,13 +14,13 @@ const DUMMY_QR =
             font-family="monospace" font-size="14">QR (demo)</text>
     </svg>`
   );
-
+*/
 export default function SolanaBuy({ userAddress }) {
   const [amt, setAmt] = useState('10');
   const [intent, setIntent] = useState(null);    // { id, solanaPayUrl, qrPngData }
   const [status, setStatus] = useState('idle');  // idle|pending|created|confirmed|failed
   const [error, setError] = useState('');
-
+/*
   const createIntent = async () => {
     if (!userAddress) {
       setError('Connect your EVM wallet first.');
@@ -63,7 +63,7 @@ export default function SolanaBuy({ userAddress }) {
       setStatus('failed');
     }
   };
-
+*/
   // REAL polling (ignored in demo because we auto-advance)
   useEffect(() => {
     if (DEMO_MODE) return;

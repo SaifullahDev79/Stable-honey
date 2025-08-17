@@ -66,7 +66,7 @@ const UserDashboard = ({ userAddress }) => {
           <SolanaBuy userAddress={userAddress} />
           <div className="info-box" style={{ marginTop: '1rem' }}>
             <h3 className="info-box-title">Current Rate</h3>
-            <p className="info-box-description">1 HNY = 1 USDC (devnet) <span style={{opacity:.7}}>(example)</span></p>
+            <p className="info-box-description">1 HNY = 10 USDC (devnet) <span style={{opacity:.7}}>(example)</span></p>
           </div>
         </div>
 

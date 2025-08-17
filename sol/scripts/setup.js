@@ -15,12 +15,26 @@ const main = async () => {
   await HoneyToken.connect(b2).mint(5000, "B2E4");
 
   console.log('b1 and b2 put 3000 HNY for sale')
-  await HoneyToken.connect(b1).approve(await HoneyMarketplace.getAddress(), 3000);
-  await HoneyToken.connect(b2).approve(await HoneyMarketplace.getAddress(), 3000);
+  await HoneyToken.connect(b1).approve(HONEYMARKETPLACE_ADDRESS, 3000);
+  await HoneyToken.connect(b2).approve(HONEYMARKETPLACE_ADDRESS, 3000);
   await HoneyMarketplace.connect(b1).offerHoney(3000);
   await HoneyMarketplace.connect(b2).offerHoney(3000);
 
+  console.log('u1 and u2 buy 150 HNY for sale');
+  await USDC.connect(u1).approve(HONEYMARKETPLACE_ADDRESS, 150);
+  await USDC.connect(u2).approve(HONEYMARKETPLACE_ADDRESS, 150);
+  await HoneyMarketplace.connect(u1).buyHoney(USDC_ADDRESS, b1.address, 150);
+  await HoneyMarketplace.connect(u2).buyHoney(USDC_ADDRESS, b2.address, 150);
+
+  console.log('u1 and u2 submit 50 HNY for redemption');
+  await HoneyToken.connect(u1).approve(HONEYMARKETPLACE_ADDRESS, 50);
+  await HoneyMarketplace.connect(u1).submitRedemption(b1.address, 50);
+  await HoneyToken.connect(u2).approve(HONEYMARKETPLACE_ADDRESS, 50);
+  await HoneyMarketplace.connect(u2).submitRedemption(b2.address, 50);
   
+  console.log('b1 and b2 fulfill the 50 HNY redemption with codes');
+  await HoneyMarketplace.connect(b1).fulfillRedemption(0, "ABC");
+  await HoneyMarketplace.connect(b2).fulfillRedemption(0, "DEF");
 
 };
 
