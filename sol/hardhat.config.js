@@ -13,6 +13,12 @@ module.exports = {
       accounts: {
         mnemonic: process.env.SEPOLIA_WALLET_MNEMONIC,
       }
+    },
+    flow: {
+      url: 'https://mainnet.evm.nodes.onflow.org',
+      accounts: {
+        mnemonic: process.env.FLOW_WALLET_MNEMONIC,
+      }
     }
   }
 };
